@@ -1,0 +1,1 @@
+insert into test(content, visible) values('Hidden text', false);

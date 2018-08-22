@@ -1,0 +1,11 @@
+version: "3.7"
+
+services:
+  local-postgres:
+    image: postgres:10.5-alpine
+    container_name: local-postgres
+    environment:
+      POSTGRES_PASSWORD: test
+      POSTGRES_USER: test
+    ports:
+    - 5432:5432

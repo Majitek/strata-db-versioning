@@ -1,0 +1,1 @@
+insert into test(content) values('Test text');

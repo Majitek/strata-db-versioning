@@ -7,6 +7,8 @@ Urbanise way for updating and versioning database instances used for Strata Mana
 - [How it works](#how-it-works)
     - [Prerequisites](#prerequisites)
     - [Options](#options)
+    - [Running](#running)
+    - [Implementation Details](#implementation-details)
 - [Contributing](#contributing)
     - [Contributors](#contributors)
     - [How to contribute](#how-to-contribute)
@@ -29,18 +31,50 @@ We use [Flyway](https://flywaydb.org/) and Bash for updating and versioning our 
     
 ### Options
 
-|Option|Meaning|Desription|
-|------|-------|----------|
-| `-h` | Help | Prints all options |
-| `-d` | URL | Sets database URL. Expected format is <host>:<port>/<db> (*required*). |
-| `-u` | Username | Sets database username. |
-| `-p` | Password | Sets database password. |
-| `-s` | Schema | Sets database schema. This can be comma separated list |
-| `-f` | SQL scripts folder | Sets the folder where sql scripts are placed. Note that the script directory is used as root. |
-| `-r` | Rollback | Executes rollback scripts defined in <sql_folder>. |
-| `-i` | Ignore | Ignores hot-fix scripts. |
+|Option|Meaning|Desription|Required| 
+|------|-------|----------|--------|
+| `-d` | URL | Sets database URL. Expected format is `<host>:<port>/<db>` | Yes |
+| `-u` | Username | Sets database username. | Yes |
+| `-p` | Password | Sets database password. | Yes |
+| `-s` | Schema | Sets database schema. This can be comma separated list | Yes |
+| `-f` | SQL scripts folder | Sets the folder where sql scripts are placed. Note that the script directory is used as root. | Yes |
+| `-r` | Rollback | Executes rollback scripts defined in <sql_folder>. | No |
+| `-i` | Ignore | Ignores hot-fix scripts. | No |
+| `-h` | Help | Prints all options | No |
     
-## Running
+### Running
+
+1. Check out the project:
+   
+   	git clone https://github.com/Majitek/strata-db-versioning.git	
+   	cd strata-db-versioning
+
+2. Run local PostgreSQL server
+
+		docker-compose up -d
+		
+3. Use one of these commands depending on specific case. Each of them relies on:
+			
+		SQL_FOLDER=$(find * -type d -name "sprint*" | sort | tail -n 1)
+	
+	* Incremental versioning
+			
+			./update_db.sh -d localhost/test -u test -p test -s public -f $SQL_FOLDER
+			
+	* Undo previously applied versions
+	
+			./update_db.sh -d localhost/test -u test -p test -s public -f $SQL_FOLDER -r
+			
+	* Ignoring hot-fixes
+	
+			./update_db.sh -d localhost/test -u test -p test -s public -f $SQL_FOLDER -i
+
+### Implementation details
+
+1. The bash script is compatible with GNU and BSD
+2. Undo functionality executes all `.rollback` scripts, so for now there is no option to revert only single change.
+3. No file prefix option is provided yet, so script change is required to add yours.
+4. History table is named `schema_history`, instead of `flyway_schema_history` 
 
 ## Contributing
 
