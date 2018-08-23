@@ -36,7 +36,7 @@ We use [Flyway](https://flywaydb.org/) and Bash for updating and versioning our 
 | `-d` | URL | Sets database URL. Expected format is `<host>:<port>/<db>` | Yes |
 | `-u` | Username | Sets database username. | Yes |
 | `-p` | Password | Sets database password. | Yes |
-| `-s` | Schema | Sets database schema. This can be comma separated list | Yes |
+| `-s` | Schema | Sets database schema. | Yes |
 | `-f` | SQL scripts folder | Sets the folder where sql scripts are placed. Note that the script directory is used as root. | Yes |
 | `-r` | Rollback | Executes rollback scripts defined in <sql_folder>. | No |
 | `-i` | Ignore | Ignores hot-fix scripts. | No |
@@ -74,7 +74,9 @@ We use [Flyway](https://flywaydb.org/) and Bash for updating and versioning our 
 1. The bash script is compatible with GNU and BSD
 2. Undo functionality executes all `.rollback` scripts, so for now there is no option to revert only single change.
 3. No file prefix option is provided yet, so script change is required to add yours.
-4. History table is named `schema_history`, instead of `flyway_schema_history` 
+4. History table is named `schema_history`, instead of `flyway_schema_history`
+5. `--net=host` is used as a parameter to Docker run command, which allows accessing local PostgreSQL server
+6. Depending on your Docker system configuration, you may be required to preface the `docker run` command with `sudo`. To avoid having to use `sudo` with the `docker` command, your system administrator can create a Unix group called `docker` and add users to it.
 
 ## Contributing
 

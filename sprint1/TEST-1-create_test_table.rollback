@@ -1,3 +1,2 @@
-drop table if exists schema_history;
 drop table if exists test;
 drop sequence if exists test_id_seq;
