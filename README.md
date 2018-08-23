@@ -46,8 +46,8 @@ We use [Flyway](https://flywaydb.org/) and Bash for updating and versioning our 
 
 1. Check out the project:
    
-   	git clone https://github.com/Majitek/strata-db-versioning.git	
-   	cd strata-db-versioning
+   		git clone https://github.com/Majitek/strata-db-versioning.git	
+   		cd strata-db-versioning
 
 2. Run local PostgreSQL server
 
