@@ -75,17 +75,21 @@ generate_schema_history() {
 	# Generated hot-fix history keeps the same versions in all environments even if hot-fix scripts are not actually
 	# executed
 	declare -a hotfix_versions=($(find ./"$SQL_FOLDER" -name "*.hotfix" -type f | cut -d '-' -f 2))
-	local insert_batch_script=""
+	if [[ -n "${hotfix_versions:-}" ]]; then
+		local insert_batch_script=""
 
-	for version in "${hotfix_versions[@]}"; do
-		insert_batch_script+="insert into \"$SCHEMA\".schema_history(installed_rank, version, description, type, script,
-		installed_by, execution_time, success) select max(installed_rank) + 1, '$version', 'Hotfix version generation',
-		'SQL', 'N/A', '$USERNAME', 0, true from schema_history;"
-	done
+		for version in "${hotfix_versions[@]}"; do
+			insert_batch_script+="insert into \"$SCHEMA\".schema_history(installed_rank, version, description, type, script,
+			installed_by, execution_time, success) select max(installed_rank) + 1, '$version', 'Hotfix version generation',
+			'SQL', 'N/A', '$USERNAME', 0, true from schema_history;"
+		done
 
-	log -i "Generating schema history"
+		log -i "Generating schema history"
 
-	psql_execute_script "$insert_batch_script"
+		psql_execute_script "$insert_batch_script"
+	else
+		log -i "Skipping schema history generation due to missing hot-fix files"
+	fi
 }
 
 run_flyway_migration() {
