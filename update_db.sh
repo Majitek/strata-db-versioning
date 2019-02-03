@@ -42,8 +42,7 @@ enforce_mandatory_options() {
 
 enforce_file_name_patterns() {
 	# Checks if the script file names match the SQL_FILE_NAME_PATTERN and throws an error when invalid is found.
-	local invalid_sql_files=$(find ./"$SQL_FOLDER" -type f | grep -vE ".*/TEST-[0-9]+-([a-z0-9]+_?)+\.
-	(sql|rollback|hotfix)$")
+	local invalid_sql_files=$(find ./"$SQL_FOLDER" -type f | grep -vE ".*/TEST-[0-9]+-([a-zA-Z0-9]+_?)+\.(sql|rollback|hotfix)$")
 
 	if [[ -n "$invalid_sql_files" ]]; then
     local formatted_file_names=$(echo "$invalid_sql_files" | tr ' ' '\n')
